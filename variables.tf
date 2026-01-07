@@ -18,13 +18,13 @@ variable "ssh_allowed_cidr" {
   # No default - expected from TFC variable
 }
 
-variable "aws_ssh_key" {
+variable "AWS_SSH_KEY" {
   description = "The NAME of the existing AWS Key Pair to use for instances"
   type        = string
   # No default - expected from TFC variable
 }
 
-variable "aws_ssh_key_content" {
+variable "AWS_SSH_KEY_CONTENT" {
   description = "The CONTENT of the private key (PEM) for the existing AWS Key Pair"
   type        = string
   sensitive   = true
