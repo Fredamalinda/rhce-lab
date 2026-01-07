@@ -1,5 +1,3 @@
-# README.md
-
 # RHCE Training Lab Infrastructure (Terraform & AWS)
 This repository contains **Terraform** code to provision a fully functional **Red Hat Certified Engineer (RHCE) EX294** exam preparation environment on AWS.
 
