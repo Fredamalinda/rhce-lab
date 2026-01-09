@@ -19,15 +19,15 @@ resource "aws_instance" "control" {
   ami                    = data.aws_ami.rhel8.id
   instance_type          = "t3.medium"
   subnet_id              = var.subnet_id
-  key_name               = var.aws_ssh_key # Use existing key name
+  key_name               = var.AWS_SSH_KEY
   vpc_security_group_ids = [var.security_group]
   
   tags = { Name = "ansible-control" }
 
   # Cloud-Init:
   # 1. Enable root login by copying authorized keys from ec2-user
-  # 2. Inject the Private Key into /root/.ssh/id_rsa so Ansible works immediately
-  # 3. Set FQDN Hostname (hyfer.com) - Added preserve_hostname and explicit hostnamectl
+  # 2. Inject the Private Key into /root/.ssh/id_rsa
+  # 3. Set FQDN Hostname (hyfer.com)
   user_data = <<-EOF
     #cloud-config
     hostname: ansible-control.hyfer.com
@@ -43,7 +43,7 @@ resource "aws_instance" "control" {
       - [ sh, -c, "chown root:root /root/.ssh/authorized_keys" ]
     write_files:
       - content: |
-          ${indent(10, var.aws_ssh_key_content)}
+          ${indent(10, var.AWS_SSH_KEY_CONTENT)}
         path: /root/.ssh/id_rsa
         permissions: '0600'
         owner: root:root
@@ -56,7 +56,7 @@ resource "aws_instance" "managed" {
   ami                    = data.aws_ami.rhel8.id
   instance_type          = "t3.micro"
   subnet_id              = var.subnet_id
-  key_name               = var.aws_ssh_key # Use existing key name
+  key_name               = var.AWS_SSH_KEY
   vpc_security_group_ids = [var.security_group]
 
   tags = { Name = "ansible${count.index + 2}" }
@@ -81,7 +81,7 @@ resource "aws_instance" "db_node" {
   ami                    = data.aws_ami.rhel8.id
   instance_type          = "t3.micro"
   subnet_id              = var.subnet_id
-  key_name               = var.aws_ssh_key # Use existing key name
+  key_name               = var.AWS_SSH_KEY
   vpc_security_group_ids = [var.security_group]
 
   tags = { Name = "ansible5" }
