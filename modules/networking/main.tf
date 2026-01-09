@@ -67,3 +67,15 @@ resource "aws_security_group" "lab_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+# --- DHCP Options for Search Domain (hyfer.com) ---
+resource "aws_vpc_dhcp_options" "lab_dhcp" {
+  domain_name         = "hyfer.com"
+  domain_name_servers = ["AmazonProvidedDNS"]
+  tags = { Name = "${var.project_name}-dhcp" }
+}
+
+resource "aws_vpc_dhcp_options_association" "lab_dns_resolver" {
+  vpc_id          = aws_vpc.lab_vpc.id
+  dhcp_options_id = aws_vpc_dhcp_options.lab_dhcp.id
+}

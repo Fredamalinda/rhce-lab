@@ -8,14 +8,14 @@ The infrastructure provisions the following resources in a private VPC:
 
 | Hostname | DNS Name | Role | Hardware Specs | 
 | ----- | ----- | ----- | ----- | 
-| **ansible-control** | `ansible-control.hl.local` | Control Node | t3.medium | 
-| **ansible2** | `ansible2.hl.local` | Managed Host | t3.micro | 
-| **ansible3** | `ansible3.hl.local` | Managed Host | t3.micro | 
-| **ansible4** | `ansible4.hl.local` | Managed Host | t3.micro | 
-| **ansible5** | `ansible5.hl.local` | Database Host | t3.micro + **1GB Extra Disk** | 
+| **ansible-control** | `ansible-control.hyfer.com` | Control Node | t3.medium | 
+| **ansible2** | `ansible2.hyfer.com` | Managed Host | t3.micro | 
+| **ansible3** | `ansible3.hyfer.com` | Managed Host | t3.micro | 
+| **ansible4** | `ansible4.hyfer.com` | Managed Host | t3.micro | 
+| **ansible5** | `ansible5.hyfer.com` | Database Host | t3.micro + **1GB Extra Disk** | 
 
 ### Key Features
-* **Networking:** Custom VPC with a private Route53 Hosted Zone (`hl.local`) to ensure exam-style DNS resolution.
+* **Networking:** Custom VPC with a private Route53 Hosted Zone (`hyfer.com`) to ensure exam-style DNS resolution.
 * **Root Access:** Cloud-Init scripts automatically enable Root login and inject SSH keys to allow the Control Node to SSH into all managed nodes as `root` without a password.
 * **Storage:** `ansible5` is automatically provisioned with the required `/dev/sdb` (1GB) for LVM tasks.
 * **CI/CD:** Fully automated deployment via GitHub Actions and Terraform Cloud.
@@ -71,7 +71,7 @@ sudo -i
 ```
 4. Verify connectivity to the lab network, this should work without a password:
 ```bash
-ssh ansible2.hl.local
+ssh ansible2.hyfer.com
 ```
 
 ## 📝 License

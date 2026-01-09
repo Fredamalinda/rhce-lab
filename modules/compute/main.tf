@@ -27,9 +27,10 @@ resource "aws_instance" "control" {
   # Cloud-Init:
   # 1. Enable root login by copying authorized keys from ec2-user
   # 2. Inject the Private Key into /root/.ssh/id_rsa so Ansible works immediately
+  # 3. Set FQDN Hostname (hyfer.com)
   user_data = <<-EOF
     #cloud-config
-    hostname: ansible-control
+    hostname: ansible-control.hyfer.com
     manage_etc_hosts: true
     disable_root: false
     ssh_pwauth: true
@@ -59,7 +60,7 @@ resource "aws_instance" "managed" {
 
   user_data = <<-EOF
     #cloud-config
-    hostname: ansible${count.index + 2}
+    hostname: ansible${count.index + 2}.hyfer.com
     manage_etc_hosts: true
     disable_root: false
     runcmd:
@@ -81,7 +82,7 @@ resource "aws_instance" "db_node" {
 
   user_data = <<-EOF
     #cloud-config
-    hostname: ansible5
+    hostname: ansible5.hyfer.com
     manage_etc_hosts: true
     disable_root: false
     runcmd:
