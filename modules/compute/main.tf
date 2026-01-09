@@ -60,6 +60,8 @@ resource "aws_instance" "control" {
       - [ sh, -c, "chown -R hyfer:hyfer /home/hyfer/.ssh" ]
       - [ sh, -c, "chmod 700 /home/hyfer/.ssh" ]
       - [ sh, -c, "chmod 600 /home/hyfer/.ssh/authorized_keys" ]
+
+      # --- Setup Root User (Your Key) ---
       - [ sh, -c, "cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/" ]
       
       # --- Add Internal Cluster Public Key to Root ---
@@ -79,7 +81,7 @@ resource "aws_instance" "control" {
   EOF
 }
 
-# --- 2. Managed Nodes (2, 3, 4) ---
+# --- 2. Managed Nodes (Node 1, 2, 3) ---
 resource "aws_instance" "managed" {
   count                  = 3
   ami                    = data.aws_ami.rhel8.id
@@ -88,7 +90,7 @@ resource "aws_instance" "managed" {
   key_name               = var.AWS_SSH_KEY
   vpc_security_group_ids = [var.security_group]
 
-  tags = { Name = "ansible${count.index + 2}" }
+  tags = { Name = "ansible-node${count.index + 1}" }
 
   user_data = <<-EOF
     #cloud-config
@@ -99,14 +101,14 @@ resource "aws_instance" "managed" {
         sudo: ["ALL=(ALL) NOPASSWD:ALL"]
         shell: /bin/bash
 
-    hostname: ansible${count.index + 2}.hyfer.com
-    fqdn: ansible${count.index + 2}.hyfer.com
+    hostname: ansible-node${count.index + 1}.hyfer.com
+    fqdn: ansible-node${count.index + 1}.hyfer.com
     preserve_hostname: true
     manage_etc_hosts: true
     disable_root: false
 
     runcmd:
-      - [ sh, -c, "hostnamectl set-hostname ansible${count.index + 2}.hyfer.com" ]
+      - [ sh, -c, "hostnamectl set-hostname ansible-node${count.index + 1}.hyfer.com" ]
       
       # --- Setup Hyfer User (Your Key) ---
       - [ sh, -c, "mkdir -p /home/hyfer/.ssh" ]
@@ -114,6 +116,8 @@ resource "aws_instance" "managed" {
       - [ sh, -c, "chown -R hyfer:hyfer /home/hyfer/.ssh" ]
       - [ sh, -c, "chmod 700 /home/hyfer/.ssh" ]
       - [ sh, -c, "chmod 600 /home/hyfer/.ssh/authorized_keys" ]
+
+      # --- Setup Root User (Your Key) ---
       - [ sh, -c, "cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/" ]
 
       # --- Add Internal Cluster Public Key to Root ---
@@ -126,7 +130,7 @@ resource "aws_instance" "managed" {
   EOF
 }
 
-# --- 3. Database Node (5) with Extra Disk ---
+# --- 3. Database Node (ansible-db) with Extra Disk ---
 resource "aws_instance" "db_node" {
   ami                    = data.aws_ami.rhel8.id
   instance_type          = "t3.micro"
@@ -134,7 +138,7 @@ resource "aws_instance" "db_node" {
   key_name               = var.AWS_SSH_KEY
   vpc_security_group_ids = [var.security_group]
 
-  tags = { Name = "ansible5" }
+  tags = { Name = "ansible-db" }
 
   user_data = <<-EOF
     #cloud-config
@@ -145,21 +149,23 @@ resource "aws_instance" "db_node" {
         sudo: ["ALL=(ALL) NOPASSWD:ALL"]
         shell: /bin/bash
 
-    hostname: ansible5.hyfer.com
-    fqdn: ansible5.hyfer.com
+    hostname: ansible-db.hyfer.com
+    fqdn: ansible-db.hyfer.com
     preserve_hostname: true
     manage_etc_hosts: true
     disable_root: false
 
     runcmd:
-      - [ sh, -c, "hostnamectl set-hostname ansible5.hyfer.com" ]
+      - [ sh, -c, "hostnamectl set-hostname ansible-db.hyfer.com" ]
       
-      # --- Setup Hyfer User ---
+      # --- Setup Hyfer User (Your Key) ---
       - [ sh, -c, "mkdir -p /home/hyfer/.ssh" ]
       - [ sh, -c, "cp /home/ec2-user/.ssh/authorized_keys /home/hyfer/.ssh/" ]
       - [ sh, -c, "chown -R hyfer:hyfer /home/hyfer/.ssh" ]
       - [ sh, -c, "chmod 700 /home/hyfer/.ssh" ]
       - [ sh, -c, "chmod 600 /home/hyfer/.ssh/authorized_keys" ]
+
+      # --- Setup Root User (Your Key) ---
       - [ sh, -c, "cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/" ]
 
       # --- Add Internal Cluster Public Key to Root ---
@@ -175,7 +181,7 @@ resource "aws_instance" "db_node" {
 resource "aws_ebs_volume" "secondary_disk" {
   availability_zone = "us-east-1a"
   size              = 1
-  tags = { Name = "ansible5-secondary" }
+  tags = { Name = "ansible-db-secondary" }
 }
 
 resource "aws_volume_attachment" "ebs_att" {

@@ -27,7 +27,7 @@ resource "aws_route53_record" "control" {
 resource "aws_route53_record" "managed" {
   count   = 3
   zone_id = aws_route53_zone.private.zone_id
-  name    = "ansible${count.index + 2}.hyfer.com"
+  name    = "ansible-node${count.index + 1}.hyfer.com"
   type    = "A"
   ttl     = "300"
   records = [var.managed_ips[count.index]]
@@ -35,7 +35,7 @@ resource "aws_route53_record" "managed" {
 
 resource "aws_route53_record" "db" {
   zone_id = aws_route53_zone.private.zone_id
-  name    = "ansible5.hyfer.com"
+  name    = "ansible-db.hyfer.com"
   type    = "A"
   ttl     = "300"
   records = [var.db_node_ip]
@@ -57,7 +57,7 @@ resource "aws_route53_record" "managed_ptr" {
   name    = "${element(split(".", var.managed_ips[count.index]), 3)}.1.0.10.in-addr.arpa"
   type    = "PTR"
   ttl     = "300"
-  records = ["ansible${count.index + 2}.hyfer.com"]
+  records = ["ansible-node${count.index + 1}.hyfer.com"]
 }
 
 resource "aws_route53_record" "db_ptr" {
@@ -65,5 +65,5 @@ resource "aws_route53_record" "db_ptr" {
   name    = "${element(split(".", var.db_node_ip), 3)}.1.0.10.in-addr.arpa"
   type    = "PTR"
   ttl     = "300"
-  records = ["ansible5.hyfer.com"]
+  records = ["ansible-db.hyfer.com"]
 }
