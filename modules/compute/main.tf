@@ -25,11 +25,15 @@ resource "aws_instance" "control" {
   tags = { Name = "ansible-control" }
 
   # Cloud-Init:
-  # 1. Enable root login by copying authorized keys from ec2-user
-  # 2. Inject the Private Key into /root/.ssh/id_rsa
-  # 3. Set FQDN Hostname (hyfer.com)
+  # 1. Rename default user to 'hyfer'
+  # 2. Enable root login by copying authorized keys from hyfer
+  # 3. Inject the Private Key into /root/.ssh/id_rsa using Base64
+  # 4. Set FQDN Hostname (hyfer.com)
   user_data = <<-EOF
     #cloud-config
+    system_info:
+      default_user:
+        name: hyfer
     hostname: ansible-control.hyfer.com
     fqdn: ansible-control.hyfer.com
     preserve_hostname: true
@@ -38,12 +42,12 @@ resource "aws_instance" "control" {
     ssh_pwauth: true
     runcmd:
       - [ sh, -c, "hostnamectl set-hostname ansible-control.hyfer.com" ]
-      - [ sh, -c, "cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/" ]
+      - [ sh, -c, "cp /home/hyfer/.ssh/authorized_keys /root/.ssh/" ]
       - [ sh, -c, "chmod 600 /root/.ssh/authorized_keys" ]
       - [ sh, -c, "chown root:root /root/.ssh/authorized_keys" ]
     write_files:
-      - content: |
-          ${indent(10, var.AWS_SSH_KEY_CONTENT)}
+      - encoding: b64
+        content: ${base64encode(var.AWS_SSH_KEY_CONTENT)}
         path: /root/.ssh/id_rsa
         permissions: '0600'
         owner: root:root
@@ -63,6 +67,9 @@ resource "aws_instance" "managed" {
 
   user_data = <<-EOF
     #cloud-config
+    system_info:
+      default_user:
+        name: hyfer
     hostname: ansible${count.index + 2}.hyfer.com
     fqdn: ansible${count.index + 2}.hyfer.com
     preserve_hostname: true
@@ -70,7 +77,7 @@ resource "aws_instance" "managed" {
     disable_root: false
     runcmd:
       - [ sh, -c, "hostnamectl set-hostname ansible${count.index + 2}.hyfer.com" ]
-      - [ sh, -c, "cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/" ]
+      - [ sh, -c, "cp /home/hyfer/.ssh/authorized_keys /root/.ssh/" ]
       - [ sh, -c, "chmod 600 /root/.ssh/authorized_keys" ]
       - [ sh, -c, "chown root:root /root/.ssh/authorized_keys" ]
   EOF
@@ -88,6 +95,9 @@ resource "aws_instance" "db_node" {
 
   user_data = <<-EOF
     #cloud-config
+    system_info:
+      default_user:
+        name: hyfer
     hostname: ansible5.hyfer.com
     fqdn: ansible5.hyfer.com
     preserve_hostname: true
@@ -95,7 +105,7 @@ resource "aws_instance" "db_node" {
     disable_root: false
     runcmd:
       - [ sh, -c, "hostnamectl set-hostname ansible5.hyfer.com" ]
-      - [ sh, -c, "cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/" ]
+      - [ sh, -c, "cp /home/hyfer/.ssh/authorized_keys /root/.ssh/" ]
       - [ sh, -c, "chmod 600 /root/.ssh/authorized_keys" ]
       - [ sh, -c, "chown root:root /root/.ssh/authorized_keys" ]
   EOF
