@@ -37,8 +37,8 @@ The infrastructure provisions the following resources in a private VPC:
 4. Add the following **Terraform Variables**:
 | Variable | Type | Description | 
 | ----- | ----- | ----- | 
-| `aws_ssh_key` | String | The **Name** of your key pair in AWS (e.g., `my-laptop-key`). | 
-| `aws_ssh_key_content` | Sensitive | The **Private Key Content** (PEM) of that key. This is copied to the Control Node. | 
+| `AWS_SSH_KEY` | String | The **Name** of your key pair in AWS (e.g., `my-laptop-key`). | 
+| `AWS_SSH_KEY_CONTENT` | Sensitive | The **Private Key Content** (PEM) of that key. This is copied to the Control Node. | 
 | `ssh_allowed_cidr` | String | Your IP address (e.g., `1.2.3.4/32`) to allow SSH access. | 
 
 ### 3. GitHub

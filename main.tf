@@ -12,8 +12,8 @@ module "compute" {
   subnet_id           = module.networking.subnet_id
   security_group      = module.networking.security_group_id
   project_name        = var.project_name
-  aws_ssh_key         = var.AWS_SSH_KEY
-  aws_ssh_key_content = var.AWS_SSH_KEY_CONTENT
+  AWS_SSH_KEY         = var.AWS_SSH_KEY
+  AWS_SSH_KEY_CONTENT = var.AWS_SSH_KEY_CONTENT
 }
 
 module "dns" {
