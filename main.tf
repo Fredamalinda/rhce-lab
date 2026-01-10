@@ -7,12 +7,12 @@ module "networking" {
 }
 
 module "compute" {
-  source              = "./modules/compute"
-  vpc_id              = module.networking.vpc_id
-  subnet_id           = module.networking.subnet_id
-  security_group      = module.networking.security_group_id
-  project_name        = var.project_name
-  AWS_SSH_KEY         = var.AWS_SSH_KEY
+  source         = "./modules/compute"
+  vpc_id         = module.networking.vpc_id
+  subnet_id      = module.networking.subnet_id
+  security_group = module.networking.security_group_id
+  project_name   = var.project_name
+  AWS_SSH_KEY    = var.AWS_SSH_KEY
 }
 
 module "dns" {
