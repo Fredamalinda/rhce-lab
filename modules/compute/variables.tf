@@ -9,9 +9,3 @@ variable "AWS_SSH_KEY" {
   description = "Name of existing AWS key pair"
   type        = string
 }
-
-variable "AWS_SSH_KEY_CONTENT" {
-  description = "Content of private key (PEM)"
-  type        = string
-  sensitive   = true
-}

@@ -23,10 +23,3 @@ variable "AWS_SSH_KEY" {
   type        = string
   # No default - expected from TFC variable
 }
-
-variable "AWS_SSH_KEY_CONTENT" {
-  description = "The CONTENT of the private key (PEM) for the existing AWS Key Pair"
-  type        = string
-  sensitive   = true
-  # No default - expected from TFC variable
-}

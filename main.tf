@@ -13,7 +13,6 @@ module "compute" {
   security_group      = module.networking.security_group_id
   project_name        = var.project_name
   AWS_SSH_KEY         = var.AWS_SSH_KEY
-  AWS_SSH_KEY_CONTENT = var.AWS_SSH_KEY_CONTENT
 }
 
 module "dns" {

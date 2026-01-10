@@ -44,15 +44,15 @@ resource "aws_instance" "control" {
         sudo: ["ALL=(ALL) NOPASSWD:ALL"]
         shell: /bin/bash
 
-    hostname: ansible-control.hyfer.com
-    fqdn: ansible-control.hyfer.com
+    hostname: ansible-control.hyfertechsolutions.com
+    fqdn: ansible-control.hyfertechsolutions.com
     preserve_hostname: true
     manage_etc_hosts: true
     ssh_pwauth: true
     disable_root: false
 
     runcmd:
-      - [ sh, -c, "hostnamectl set-hostname ansible-control.hyfer.com" ]
+      - [ sh, -c, "hostnamectl set-hostname ansible-control.hyfertechsolutions.com" ]
       
       # --- Setup Hyfer User (Your Key) ---
       - [ sh, -c, "mkdir -p /home/hyfer/.ssh" ]
@@ -101,14 +101,14 @@ resource "aws_instance" "managed" {
         sudo: ["ALL=(ALL) NOPASSWD:ALL"]
         shell: /bin/bash
 
-    hostname: ansible-node${count.index + 1}.hyfer.com
-    fqdn: ansible-node${count.index + 1}.hyfer.com
+    hostname: ansible-node${count.index + 1}.hyfertechsolutions.com
+    fqdn: ansible-node${count.index + 1}.hyfertechsolutions.com
     preserve_hostname: true
     manage_etc_hosts: true
     disable_root: false
 
     runcmd:
-      - [ sh, -c, "hostnamectl set-hostname ansible-node${count.index + 1}.hyfer.com" ]
+      - [ sh, -c, "hostnamectl set-hostname ansible-node${count.index + 1}.hyfertechsolutions.com" ]
       
       # --- Setup Hyfer User (Your Key) ---
       - [ sh, -c, "mkdir -p /home/hyfer/.ssh" ]
@@ -149,14 +149,14 @@ resource "aws_instance" "db_node" {
         sudo: ["ALL=(ALL) NOPASSWD:ALL"]
         shell: /bin/bash
 
-    hostname: ansible-db.hyfer.com
-    fqdn: ansible-db.hyfer.com
+    hostname: ansible-db.hyfertechsolutions.com
+    fqdn: ansible-db.hyfertechsolutions.com
     preserve_hostname: true
     manage_etc_hosts: true
     disable_root: false
 
     runcmd:
-      - [ sh, -c, "hostnamectl set-hostname ansible-db.hyfer.com" ]
+      - [ sh, -c, "hostnamectl set-hostname ansible-db.hyfertechsolutions.com" ]
       
       # --- Setup Hyfer User (Your Key) ---
       - [ sh, -c, "mkdir -p /home/hyfer/.ssh" ]

@@ -68,9 +68,9 @@ resource "aws_security_group" "lab_sg" {
   }
 }
 
-# --- DHCP Options for Search Domain (hyfer.com) ---
+# --- DHCP Options for Search Domain (hyfertechsolutions.com) ---
 resource "aws_vpc_dhcp_options" "lab_dhcp" {
-  domain_name         = "hyfer.com"
+  domain_name         = "hyfertechsolutions.com"
   domain_name_servers = ["AmazonProvidedDNS"]
   tags = { Name = "${var.project_name}-dhcp" }
 }

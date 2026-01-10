@@ -8,16 +8,17 @@ The infrastructure provisions the following resources in a private VPC:
 
 | Hostname | DNS Name | Role | Hardware Specs | 
 | ----- | ----- | ----- | ----- | 
-| **ansible-control** | `ansible-control.hyfer.com` | Control Node | t3.medium | 
-| **ansible2** | `ansible2.hyfer.com` | Managed Host | t3.micro | 
-| **ansible3** | `ansible3.hyfer.com` | Managed Host | t3.micro | 
-| **ansible4** | `ansible4.hyfer.com` | Managed Host | t3.micro | 
-| **ansible5** | `ansible5.hyfer.com` | Database Host | t3.micro + **1GB Extra Disk** | 
+| **ansible-control** | `ansible-control.hyfertechsolutions.com` | Control Node | t3.medium | 
+| **ansible-node1** | `ansible-node1.hyfertechsolutions.com` | Managed Host | t3.micro | 
+| **ansible-node2** | `ansible-node2.hyfertechsolutions.com` | Managed Host | t3.micro | 
+| **ansible-node3** | `ansible-node3.hyfertechsolutions.com` | Managed Host | t3.micro | 
+| **ansible-db** | `ansible-db.hyfertechsolutions.com` | Database Host | t3.micro + **1GB Extra Disk** | 
 
 ### Key Features
-* **Networking:** Custom VPC with a private Route53 Hosted Zone (`hyfer.com`) to ensure exam-style DNS resolution.
+* **Networking:** Custom VPC with a private Route53 Hosted Zone (`hyfertechsolutions.com`) and DHCP Options to ensure valid Forward and Reverse DNS resolution.
+* **External Access:** You connect to all nodes as the user `hyfer` using your personal AWS Key Pair.
 * **Root Access:** Cloud-Init scripts automatically enable Root login and inject SSH keys to allow the Control Node to SSH into all managed nodes as `root` without a password.
-* **Storage:** `ansible5` is automatically provisioned with the required `/dev/sdb` (1GB) for LVM tasks.
+* **Storage:** `ansible-db` is automatically provisioned with the required `/dev/sdb` (1GB) for LVM tasks.
 * **CI/CD:** Fully automated deployment via GitHub Actions and Terraform Cloud.
 
 ## 🚀 Setup & Prerequisites
@@ -37,8 +38,7 @@ The infrastructure provisions the following resources in a private VPC:
 4. Add the following **Terraform Variables**:
 | Variable | Type | Description | 
 | ----- | ----- | ----- | 
-| `AWS_SSH_KEY` | String | The **Name** of your key pair in AWS (e.g., `my-laptop-key`). | 
-| `AWS_SSH_KEY_CONTENT` | Sensitive | The **Private Key Content** (PEM) of that key. This is copied to the Control Node. | 
+| `AWS_SSH_KEY` | String | The **Name** of your key pair in AWS (e.g., `my-laptop-key`). |
 | `ssh_allowed_cidr` | String | Your IP address (e.g., `1.2.3.4/32`) to allow SSH access. | 
 
 ### 3. GitHub
@@ -61,17 +61,18 @@ The infrastructure provisions the following resources in a private VPC:
 
 ## 💻 Connecting to the Lab
 1. After the `apply` finishes, get the **Control Node Public IP** from the Terraform Output or AWS Console.
-2. SSH into the control node using your local key:
+2. SSH into the control node using your local key (Note the user is `hyfer`):
 ```bash
-ssh -i /path/to/your-key.pem ec2-user@<CONTROL_NODE_IP>
+ssh -i /path/to/your-key.pem hyfer@<CONTROL_NODE_IP>
 ```
 3. Switch to root:
 ```bash
 sudo -i
 ```
-4. Verify connectivity to the lab network, this should work without a password:
+4. Verify Internal Access: Switch to root and test connectivity to a managed node:
 ```bash
-ssh ansible2.hyfer.com
+sudo su -
+ssh ansible-node1.hyfertechsolutions.com
 ```
 
 ## 📝 License
