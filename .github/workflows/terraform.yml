@@ -1,4 +1,5 @@
 # .github/workflows/terraform.yml
+
 name: "Terraform Infrastructure"
 
 on:
@@ -25,6 +26,9 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
     permissions:
       contents: read
       pull-requests: write
@@ -36,7 +40,6 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          # terraform_version: 1.5.0
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Format
