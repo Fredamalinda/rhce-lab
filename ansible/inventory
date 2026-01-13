@@ -1,0 +1,18 @@
+# ansible/inventory
+
+[control] #Using as bastion host
+ansible-control.hyfertechsolutions.com
+
+[proxy]
+ansible-node1.hyfertechsolutions.com
+
+[webservers]
+ansible-node2.hyfertechsolutions.com
+ansible-node3.hyfertechsolutions.com
+
+[database]
+ansible-db.hyfertechsolutions.com
+
+[all:vars]
+ansible_user=hyfer
+ansible_python_interpreter=/usr/bin/python3.9
