@@ -75,5 +75,14 @@ sudo su -
 ssh ansible-node1.hyfertechsolutions.com
 ```
 
+## 📚 Lab Questions & Exam Tasks
+This environment is designed to support the Ansible Sample Exam for EX294 provided by Lisenet.
+👉 [Click here to view the Lab Questions and Tasks](https://www.lisenet.com/2019/ansible-sample-exam-for-ex294/)
+
+⚠️ Note on Solutions
+The ansible/ directory in this repository contains configuration files and scripts that act as solutions or starting points for the tasks.
+
+I strongly recommend attempting to solve the tasks yourself first before looking at the files in that directory. The best way to prepare for the exam is to build your own playbooks from scratch!
+
 ## 📝 License
 This project is for educational purposes.
