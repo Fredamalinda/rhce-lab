@@ -76,7 +76,7 @@ ssh ansible-node1.hyfertechsolutions.com
 ```
 
 ## 📚 Lab Questions & Exam Tasks
-This environment is designed to support the Ansible Sample Exam for EX294 provided by Lisenet.
+This environment is designed to support the Ansible Sample Exam for EX294 provided by Lisenet.  
 👉 [Click here to view the Lab Questions and Tasks](https://www.lisenet.com/2019/ansible-sample-exam-for-ex294/)
 
 ⚠️ Note on Solutions
