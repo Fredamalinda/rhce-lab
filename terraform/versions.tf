@@ -15,7 +15,7 @@ terraform {
   }
 
   cloud {
-    organization = "Hyfer-Org"
+    organization = "frezdbanjhi"
 
     workspaces {
       name = "rhce-lab"
